@@ -1522,4 +1522,4 @@ export function DentalLayout() {
       <Chatbot />
     </div>
   );
-}
+} 
