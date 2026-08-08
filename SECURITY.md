@@ -67,3 +67,4 @@ In the event of a confirmed security breach or critical vulnerability exposure:
 1. An emergency patch will be developed and merged to the `main` branch.
 2. The Vercel production deployment will be invalidated and redeployed immediately.
 3. If necessary, user sessions will be forcibly invalidated by rotating the required `localStorage` token keys in the new deployment build.
+ 
