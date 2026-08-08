@@ -171,4 +171,4 @@ The repository is configured for immediate, zero-config deployment on the Vercel
 > A: The `jsPDF` engine relies on absolute positioning geometry. If significant structural changes are made to the text strings within the `generateClinicalReport` function, developers must manually recalculate and adjust the corresponding Y-axis offsets to accommodate text wrapping.
 
 **Q: Newly applied Tailwind CSS classes are not rendering.**
-> A: Verify that you are utilizing Tailwind v4 utility syntax. Additionally, ensure that class names are not being constructed dynamically via string concatenation (e.g., `text-${color}-500`), as the JIT compiler cannot analyze runtime strings. Always use complete class names or rely on the `safelist` configuration if dynamic generation is strictly necessary.
+> A: Verify that you are utilizing Tailwind v4 utility syntax. Additionally, ensure that class names are not being constructed dynamically via string concatenation (e.g., `text-${color}-500`), as the JIT compiler cannot analyze runtime strings. Always use complete class names or rely on the `safelist` configuration if dynamic generation is strictly necessary. 
