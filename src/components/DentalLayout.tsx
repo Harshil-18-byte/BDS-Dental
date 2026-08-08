@@ -143,6 +143,7 @@ export function DentalLayout() {
 
   // Feature 8/12: Patient Portal Session Persistence
   const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem('pandere_logged_in') === 'true');
+  const [dismissedLock, setDismissedLock] = useState(false);
 
   useEffect(() => {
     localStorage.setItem('pandere_settings', JSON.stringify(settings));
@@ -234,10 +235,10 @@ export function DentalLayout() {
       <div className="fixed bottom-6 right-6 z-[100] flex flex-col items-end gap-3">
         {phoneMenuOpen && (
           <div className="flex flex-col gap-3 animate-in slide-in-from-bottom-5">
-            <a href="https://wa.me/910000000000" className="w-12 h-12 rounded-full liquid-glass-strong text-white border border-white/20 flex items-center justify-center hover:scale-110 shadow-lg transition-all">
+            <a href={CLINIC_WHATSAPP} target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full liquid-glass-strong text-white border border-white/20 flex items-center justify-center hover:scale-110 shadow-lg transition-all">
               <Phone className="w-5 h-5 text-green-400" />
             </a>
-            <a href="tel:+910000000000" className="w-12 h-12 rounded-full liquid-glass-strong text-white border border-white/20 flex items-center justify-center hover:scale-110 shadow-lg transition-all">
+            <a href={`tel:${CLINIC_PHONE}`} className="w-12 h-12 rounded-full liquid-glass-strong text-white border border-white/20 flex items-center justify-center hover:scale-110 shadow-lg transition-all">
               <PhoneCall className="w-5 h-5" />
             </a>
           </div>
@@ -311,7 +312,8 @@ export function DentalLayout() {
 
           {!isLoggedIn ? (
             /* LOGIN SCREEN */
-            <div className="liquid-glass-strong rounded-[3rem] w-full max-w-md p-10 relative z-10 animate-in zoom-in-95 shadow-[0_0_80px_rgba(255,255,255,0.05)] border border-white/20 flex flex-col gap-8 text-center">
+            <div className="liquid-glass-strong rounded-[3.5rem] w-full max-w-md p-10 relative z-10 animate-in zoom-in-95 shadow-2xl border border-white/20 flex flex-col gap-8 text-center">
+               <button onClick={() => setPortalOpen(false)} className="absolute top-6 right-6 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 z-20 transition-all"><X className="w-5 h-5 text-white" /></button>
                <div className="w-16 h-16 rounded-full liquid-glass flex items-center justify-center mx-auto">
                  <ShieldCheck className="w-8 h-8 text-white" />
                </div>
@@ -327,7 +329,7 @@ export function DentalLayout() {
                      <input 
                        type="email" 
                        placeholder="Email Address" 
-                       className="liquid-glass px-6 py-4 rounded-2xl text-white outline-none focus:border-white/40 transition-all text-sm backdrop-blur-none"
+                       className="liquid-glass px-6 py-4 rounded-full text-white outline-none focus:border-white/40 transition-all text-sm backdrop-blur-none"
                        value={loginEmail}
                        onChange={(e) => setLoginEmail(e.target.value)}
                      />
@@ -338,7 +340,7 @@ export function DentalLayout() {
                      <input 
                        type="password" 
                        placeholder="Security Password" 
-                       className="liquid-glass px-6 py-4 rounded-2xl text-white outline-none focus:border-white/40 transition-all text-sm backdrop-blur-none"
+                       className="liquid-glass px-6 py-4 rounded-full text-white outline-none focus:border-white/40 transition-all text-sm backdrop-blur-none"
                        value={loginPass}
                        onChange={(e) => setLoginPass(e.target.value)}
                      />
@@ -347,7 +349,7 @@ export function DentalLayout() {
 
                <button 
                  onClick={() => loginEmail && loginPass && setIsLoggedIn(true)}
-                 className="mt-2 liquid-glass-strong text-white py-5 rounded-2xl font-bold hover:scale-[1.02] active:scale-[0.98] transition-all border border-white/10 shadow-xl"
+                 className="mt-2 liquid-glass-strong text-white py-5 rounded-full font-bold hover:scale-[1.02] active:scale-[0.98] transition-all border border-white/10 shadow-xl"
                >
                  Authenticate Access
                </button>
@@ -359,7 +361,7 @@ export function DentalLayout() {
             </div>
           ) : (
             /* DASHBOARD */
-            <div className={`liquid-glass rounded-[2.5rem] w-full max-w-5xl max-h-[85vh] relative z-10 animate-in zoom-in-95 shadow-2xl border border-white/20 flex flex-col md:flex-row overflow-hidden transition-all duration-700 ${settings.blur ? 'backdrop-blur-3xl' : 'backdrop-blur-none'}`}>
+            <div className={`liquid-glass rounded-[3.5rem] w-full max-w-5xl max-h-[85vh] relative z-10 animate-in zoom-in-95 shadow-2xl border border-white/20 flex flex-col md:flex-row overflow-hidden transition-all duration-700 ${settings.blur ? 'backdrop-blur-3xl' : 'backdrop-blur-none'}`}>
               {/* Sidebar Tabs */}
               <div className="w-full md:w-72 bg-white/5 border-b md:border-b-0 md:border-r border-white/10 p-8 flex flex-col gap-2">
                  <div className="flex items-center gap-3 mb-10 px-2">
@@ -376,13 +378,13 @@ export function DentalLayout() {
                    <button 
                      key={tab.id}
                      onClick={() => setActivePortalTab(tab.id as 'profile' | 'history' | 'records' | 'settings')}
-                     className={`flex items-center gap-4 px-5 py-4 rounded-2xl transition-all text-sm font-medium ${activePortalTab === tab.id ? 'bg-white text-black' : 'text-white/60 hover:bg-white/5 hover:text-white'}`}
+                     className={`flex items-center gap-4 px-5 py-4 rounded-full transition-all text-sm font-medium ${activePortalTab === tab.id ? 'bg-white text-black' : 'text-white/60 hover:bg-white/5 hover:text-white'}`}
                    >
                      {tab.icon}
                      {tab.label}
                    </button>
                  ))}
-                 <button onClick={() => setIsLoggedIn(false)} className="mt-auto px-5 py-4 rounded-2xl text-white/40 hover:text-red-400 text-sm text-left font-medium transition-colors">Sign Out Account</button>
+                 <button onClick={() => setIsLoggedIn(false)} className="mt-auto px-5 py-4 rounded-full text-white/40 hover:text-red-400 text-sm text-left font-medium transition-colors">Sign Out Account</button>
               </div>
 
               {/* Content Area */}
@@ -407,15 +409,15 @@ export function DentalLayout() {
                             </div>
                          </div>
                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="liquid-glass p-6 rounded-2xl border border-white/5 flex flex-col gap-1">
+                            <div className="liquid-glass p-6 rounded-[2rem] border border-white/5 flex flex-col gap-1">
                                <span className="text-[10px] uppercase tracking-widest text-white/30">Verified Phone</span>
                                <span className="text-white font-medium">+91 98221 XXX01</span>
                             </div>
-                            <div className="liquid-glass p-6 rounded-2xl border border-white/5 flex flex-col gap-1">
+                            <div className="liquid-glass p-6 rounded-[2rem] border border-white/5 flex flex-col gap-1">
                                <span className="text-[10px] uppercase tracking-widest text-white/30">Emergency Contact</span>
                                <span className="text-white font-medium">+91 94220 XXX68</span>
                             </div>
-                            <div className="liquid-glass p-6 rounded-2xl border border-white/5 flex flex-col gap-1 md:col-span-2">
+                            <div className="liquid-glass p-6 rounded-[2rem] border border-white/5 flex flex-col gap-1 md:col-span-2">
                                <span className="text-[10px] uppercase tracking-widest text-white/30">Primary Address</span>
                                <span className="text-white font-medium">Gorai 1, Pragati Nagar, Borivali (W), Mumbai.</span>
                             </div>
@@ -427,10 +429,10 @@ export function DentalLayout() {
                       <div className="flex flex-col gap-8 animate-in fade-in slide-in-from-right-4">
                          <div className="flex items-center justify-between">
                             <h3 className="text-2xl font-medium text-white">Clinical Timeline</h3>
-                            <button className="text-xs text-white/40 hover:text-white transition-colors underline">Download Schedule</button>
+                            <button onClick={() => alert('Downloading clinical schedule...')} className="text-xs text-white/40 hover:text-white transition-colors underline">Download Schedule</button>
                          </div>
                          <div className="flex flex-col gap-4">
-                            <div className="liquid-glass p-6 rounded-2xl border border-white/30 relative overflow-hidden">
+                            <div className="liquid-glass p-6 rounded-[2rem] border border-white/30 relative overflow-hidden">
                                <div className="absolute left-0 top-0 bottom-0 w-1 bg-white" />
                                <div className="flex justify-between items-start mb-2 pl-2">
                                  <span className="text-white font-medium text-lg">Next: Consultation & RCT Audit</span>
@@ -438,7 +440,7 @@ export function DentalLayout() {
                                </div>
                                <p className="text-white/60 text-sm pl-2">Tomorrow, 10:30 AM • Gorai Clinic</p>
                             </div>
-                            <div className="liquid-glass p-6 rounded-2xl border border-white/10 opacity-50 pl-6">
+                            <div className="liquid-glass p-6 rounded-[2rem] border border-white/10 opacity-50 pl-6">
                                <div className="flex justify-between items-start mb-1">
                                  <span className="text-white font-medium italic">Previous: Structural CBCT Scan</span>
                                  <span className="text-white/20 text-[10px] uppercase font-bold">Concluded</span>
@@ -539,9 +541,14 @@ export function DentalLayout() {
         <div className="fixed inset-0 z-[120] flex items-center justify-center p-0 lg:p-8">
            <div className="absolute inset-0 bg-black/60 backdrop-blur-2xl" onClick={() => setSelectedService(null)} />
            
-           <div className="liquid-glass-strong w-full h-full lg:rounded-[3rem] lg:max-w-6xl relative z-10 animate-in slide-in-from-bottom-10 flex flex-col lg:flex-row overflow-hidden border border-white/20 shadow-2xl">
-              <button onClick={() => setSelectedService(null)} className="absolute top-8 left-8 w-12 h-12 rounded-full bg-black/20 backdrop-blur-md flex items-center justify-center hover:bg-black/40 text-white z-50 transition-all border border-white/10 group">
-                <X className="w-6 h-6 group-hover:scale-90 transition-transform" />
+           <div className="w-full h-full lg:h-auto lg:max-w-5xl liquid-glass lg:rounded-[3rem] relative z-10 flex flex-col lg:flex-row overflow-hidden border border-white/20 shadow-2xl animate-in fade-in zoom-in-95">
+              
+              {/* Close Button */}
+              <button 
+                onClick={() => setSelectedService(null)}
+                className="absolute top-6 right-6 z-50 w-12 h-12 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center text-white border border-white/10 hover:bg-black/60 transition-all"
+              >
+                <X className="w-6 h-6" />
               </button>
 
               {/* Visual Hero */}
@@ -709,12 +716,12 @@ export function DentalLayout() {
       {/* Immersive Full-Screen Modals - The Clinical Suite (Themed & Cleaned) */}
       {immersiveModal && (
         <div className="fixed inset-0 z-[110] flex items-center justify-center p-0 lg:p-8 animate-in fade-in duration-500">
-          <div className="absolute inset-0 bg-white/[0.02] backdrop-blur-[100px]" onClick={() => { setImmersiveModal(null); setAnalysisActive(false); }} />
+          <div className="absolute inset-0 bg-gradient-to-br from-black/40 to-black/15 backdrop-blur-md" onClick={() => { setImmersiveModal(null); setAnalysisActive(false); }} />
           
-          <div className="w-full h-full lg:rounded-[3.5rem] lg:max-w-6xl relative z-10 flex flex-col bg-white/[0.05] border border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.5)] overflow-hidden transition-all duration-700 animate-in zoom-in-95">
+          <div className="w-full h-full lg:rounded-[3.5rem] lg:max-w-5xl relative z-10 flex flex-col liquid-glass border border-white/20 shadow-2xl overflow-hidden transition-all duration-700 animate-in zoom-in-95">
             
             {/* 1 Header */}
-            <div className="px-12 py-10 border-b border-white/5 flex items-center justify-between backdrop-blur-3xl bg-white/[0.03]">
+            <div className="px-12 py-10 border-b border-white/10 flex items-center justify-between">
                <div className="flex items-center gap-8">
                   <div className="w-16 h-16 rounded-[1.5rem] bg-white/5 flex items-center justify-center border border-white/10 shadow-inner group transition-all">
                      {immersiveModal === 'care-plan' && <Sparkles className="w-8 h-8 text-white/90" />}
@@ -812,7 +819,7 @@ export function DentalLayout() {
                           { title: "Invisible Aligner Paths", cat: "Cosmetic", desc: "How clear mapping can shift your smile without traditional metal wires.", icon: <Wand2 className="w-6 h-6" /> },
                           { title: "Gum Tissue Rejuvenation", cat: "Periodontal", desc: "Non-surgical laser protocols for restoring a healthy foundation.", icon: <Activity className="w-6 h-6" /> }
                         ].map((doc, i) => (
-                          <div key={i} className="liquid-glass p-12 rounded-[3rem] border border-white/5 hover:bg-white/[0.04] transition-all cursor-pointer group shadow-2xl flex flex-col gap-8">
+                          <div key={i} onClick={() => alert(`Opening protocol: ${doc.title}`)} className="liquid-glass p-12 rounded-[3rem] border border-white/5 hover:bg-white/[0.04] transition-all cursor-pointer group shadow-2xl flex flex-col gap-8">
                              <div className="flex justify-between items-start">
                                 <div className="w-16 h-16 rounded-3xl bg-white/5 flex items-center justify-center border border-white/10 group-hover:bg-white group-hover:text-black transition-all shadow-inner">
                                    {doc.icon}
@@ -823,7 +830,7 @@ export function DentalLayout() {
                                 <h4 className="text-3xl font-medium text-white tracking-tight">{doc.title}</h4>
                                 <p className="text-white/40 text-base leading-relaxed line-clamp-2">{doc.desc}</p>
                              </div>
-                             <button className="flex items-center gap-4 text-white/60 font-black text-[10px] tracking-[0.3em] uppercase group-hover:text-white transition-all">
+                             <button onClick={(e) => { e.stopPropagation(); alert(`View Protocol Guide for ${doc.title}`); }} className="flex items-center gap-4 text-white/60 font-black text-[10px] tracking-[0.3em] uppercase group-hover:text-white transition-all">
                                 View Protocol Guide 
                                 <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all">
                                    <ArrowRight className="w-4 h-4" />
@@ -852,7 +859,7 @@ export function DentalLayout() {
                                        <p className="text-white/30 text-[10px] font-black uppercase tracking-[0.3em]">Verified Authorization</p>
                                     </div>
                                  </div>
-                                 <button className="flex items-center gap-4 pl-10 pr-2 py-2 rounded-full liquid-glass text-white text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl group/btn">
+                                 <button onClick={() => alert('Starting claim authorization...')} className="flex items-center gap-4 pl-10 pr-2 py-2 rounded-full liquid-glass text-white text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl group/btn">
                                     Activate Claim
                                     <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover/btn:bg-white group-hover/btn:text-black transition-all">
                                        <Plus className="w-5 h-5" />
@@ -861,7 +868,7 @@ export function DentalLayout() {
                               </div>
                               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 relative z-10">
                                  {["Star Health", "Niva Bupa", "HDFC ERGO", "Care Health", "ICICI Lombard", "Aditya Birla", "Bajaj Allianz", "United Health"].map((item) => (
-                                   <div key={item} className="bg-white/5 p-6 rounded-[2rem] border border-white/5 flex flex-col items-center gap-3 hover:bg-white group/item transition-all cursor-pointer">
+                                   <div key={item} onClick={() => alert(`Verifying eligibility with ${item}...`)} className="bg-white/5 p-6 rounded-[2rem] border border-white/5 flex flex-col items-center gap-3 hover:bg-white group/item transition-all cursor-pointer">
                                       <div className="w-10 h-10 rounded-2xl bg-white/5 flex items-center justify-center text-white/40 font-bold text-xs group-hover/item:bg-black group-hover/item:text-white transition-all">{item[0]}</div>
                                       <span className="text-white/80 text-[10px] font-medium text-center group-hover/item:text-black transition-colors">{item}</span>
                                    </div>
@@ -869,12 +876,12 @@ export function DentalLayout() {
                               </div>
                            </div>
                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                              <div className="liquid-glass p-12 rounded-[3rem] border border-white/5 flex flex-col gap-6 hover:bg-white/10 transition-all cursor-pointer group shadow-xl">
+                              <div onClick={() => { setImmersiveModal(null); setLegalModal('finance'); }} className="liquid-glass p-12 rounded-[3rem] border border-white/5 flex flex-col gap-6 hover:bg-white/10 transition-all cursor-pointer group shadow-xl">
                                  <div className="w-16 h-16 rounded-3xl bg-white/5 flex items-center justify-center border border-white/10"><Heart className="w-8 h-8 text-blue-400" /></div>
                                  <h4 className="text-2xl font-medium text-white tracking-tight">Structural EMI</h4>
                                  <p className="text-white/40 text-sm leading-relaxed">0% Interest pathways for treatments above ₹15,000.</p>
                               </div>
-                              <div className="liquid-glass p-12 rounded-[3rem] border border-white/5 flex flex-col gap-6 hover:bg-white/10 transition-all cursor-pointer group shadow-xl">
+                              <div onClick={() => alert('Initiating Direct Billing Protocol...')} className="liquid-glass p-12 rounded-[3rem] border border-white/5 flex flex-col gap-6 hover:bg-white/10 transition-all cursor-pointer group shadow-xl">
                                  <div className="w-16 h-16 rounded-3xl bg-white/5 flex items-center justify-center border border-white/10"><Globe className="w-8 h-8 text-white/60" /></div>
                                  <h4 className="text-2xl font-medium text-white tracking-tight">Direct Billing</h4>
                                  <p className="text-white/40 text-sm leading-relaxed">Concierge invoicing for international corporate partners.</p>
@@ -898,7 +905,7 @@ export function DentalLayout() {
                                  <p className="text-white/30 text-[9px] font-black uppercase tracking-widest mb-3">Monthly Recovery Path</p>
                                  <p className="text-5xl font-medium text-white tracking-tighter">₹ 3,750</p>
                               </div>
-                              <button className="flex items-center justify-between pl-10 pr-2 py-2 rounded-full bg-white text-black font-black text-[10px] uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-2xl w-full">
+                              <button onClick={() => alert('Approval Request Sent!')} className="flex items-center justify-between pl-10 pr-2 py-2 rounded-full bg-white text-black font-black text-[10px] uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-2xl w-full">
                                  Instant Approval
                                  <div className="w-10 h-10 rounded-full bg-black/10 flex items-center justify-center">
                                     <ShieldCheck className="w-5 h-5 text-black" />
@@ -926,7 +933,7 @@ export function DentalLayout() {
                                 { title: "Managed Care", sub: "Authorization Help", icon: <ShieldCheck className="w-6 h-6" /> },
                                 { title: "Portal Tech", sub: "Report Access", icon: <FileText className="w-6 h-6" /> }
                               ].map((cat, i) => (
-                                <div key={i} className="liquid-glass p-12 rounded-[3rem] border border-white/5 hover:bg-white/10 transition-all cursor-pointer group shadow-2xl flex flex-col gap-8">
+                                <div key={i} onClick={() => alert(`Redirecting to ${cat.title}...`)} className="liquid-glass p-12 rounded-[3rem] border border-white/5 hover:bg-white/10 transition-all cursor-pointer group shadow-2xl flex flex-col gap-8">
                                    <div className="w-16 h-16 rounded-3xl bg-white/5 flex items-center justify-center border border-white/10 group-hover:bg-white group-hover:text-black transition-all">
                                       {cat.icon}
                                    </div>
@@ -982,7 +989,7 @@ export function DentalLayout() {
                                  <span className="text-blue-400 text-[10px] font-black uppercase tracking-[0.4em] px-4 py-1.5 rounded-full bg-blue-400/5 transition-colors">{p.sub}</span>
                                  <h4 className="text-4xl font-medium text-white tracking-tight">{p.title}</h4>
                               </div>
-                              <button className="flex items-center justify-between pl-10 pr-2 py-2 rounded-full border border-white/10 text-white font-black text-[10px] uppercase tracking-widest hover:bg-white hover:text-black transition-all w-full group/btn">
+                              <button onClick={() => window.open(CLINIC_WHATSAPP)} className="flex items-center justify-between pl-10 pr-2 py-2 rounded-full border border-white/10 text-white font-black text-[10px] uppercase tracking-widest hover:bg-white hover:text-black transition-all w-full group/btn">
                                  Initiate Concierge Session 
                                  <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover/btn:bg-black group-hover/btn:text-white transition-all"><ArrowRight className="w-6 h-6" /></div>
                               </button>
@@ -1115,15 +1122,16 @@ export function DentalLayout() {
 
       {/* Booking / Schedule Form - MOVED for professional conversion after trust */}
       <section id="booking" className="w-full max-w-screen-lg mx-auto scroll-mt-32 relative">
-         {!isLoggedIn && (
-           <div className="absolute inset-0 z-20 backdrop-blur-[2px] bg-black/5 rounded-[3rem] flex items-center justify-center p-6 text-center">
-              <div className="liquid-glass p-12 rounded-[2.5rem] border border-white/10 shadow-2xl animate-in fade-in zoom-in-95 max-w-md">
+         {(!isLoggedIn && !dismissedLock) && (
+           <div className="absolute inset-0 z-20 backdrop-blur-[2px] bg-black/5 rounded-[3.5rem] flex items-center justify-center p-6 text-center">
+              <div className="liquid-glass p-12 rounded-[3.5rem] border border-white/10 shadow-2xl animate-in fade-in zoom-in-95 max-w-md relative">
+                 <button onClick={() => setDismissedLock(true)} className="absolute top-6 right-6 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-all z-20"><X className="w-5 h-5 text-white" /></button>
                  <ShieldCheck className="w-12 h-12 text-white/40 mb-6 mx-auto" />
                  <h3 className="text-2xl font-medium text-white mb-4">Scheduling Locked</h3>
                  <p className="text-white/40 text-sm mb-8">To protect your privacy and ensure the best care, please log in to see our live schedule.</p>
                  <button 
                    onClick={() => setPortalOpen(true)}
-                   className="bg-white text-black px-8 py-4 rounded-2xl font-bold hover:scale-105 transition-all text-sm w-full"
+                   className="bg-white text-black px-8 py-4 rounded-full font-bold hover:scale-105 transition-all text-sm w-full"
                  >
                    Verify Identity to Unlock
                  </button>
@@ -1154,9 +1162,9 @@ export function DentalLayout() {
                   <div className="flex flex-col gap-8 animate-in fade-in zoom-in-95">
                     <h3 className="text-2xl lg:text-3xl text-white font-medium text-center">Are you experiencing dental pain?</h3>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <button onClick={() => setQuestionStep(2)} className="liquid-glass p-6 rounded-2xl text-white hover:bg-white/20 transition-all font-medium text-sm">Yes, severe pain</button>
-                      <button onClick={() => setQuestionStep(2)} className="liquid-glass p-6 rounded-2xl text-white hover:bg-white/20 transition-all font-medium text-sm">Mild sensitivity</button>
-                      <button onClick={() => setQuestionStep(2)} className="liquid-glass p-6 rounded-2xl text-white hover:bg-white/20 transition-all font-medium text-sm">No, just routine call</button>
+                      <button onClick={() => setQuestionStep(2)} className="liquid-glass p-6 rounded-full text-white hover:bg-white/20 transition-all font-medium text-sm">Yes, severe pain</button>
+                      <button onClick={() => setQuestionStep(2)} className="liquid-glass p-6 rounded-full text-white hover:bg-white/20 transition-all font-medium text-sm">Mild sensitivity</button>
+                      <button onClick={() => setQuestionStep(2)} className="liquid-glass p-6 rounded-full text-white hover:bg-white/20 transition-all font-medium text-sm">No, just routine call</button>
                     </div>
                   </div>
                 )}
@@ -1165,10 +1173,10 @@ export function DentalLayout() {
                   <div className="flex flex-col gap-8 animate-in fade-in zoom-in-95">
                     <h3 className="text-2xl lg:text-3xl text-white font-medium text-center">When was your last dental visit?</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <button onClick={() => setQuestionStep(3)} className="liquid-glass p-6 rounded-2xl text-white hover:bg-white/20 transition-all font-medium text-sm">Less than 6 months</button>
-                      <button onClick={() => setQuestionStep(3)} className="liquid-glass p-6 rounded-2xl text-white hover:bg-white/20 transition-all font-medium text-sm">6-12 months ago</button>
-                      <button onClick={() => setQuestionStep(3)} className="liquid-glass p-6 rounded-2xl text-white hover:bg-white/20 transition-all font-medium text-sm">1-3 years ago</button>
-                      <button onClick={() => setQuestionStep(3)} className="liquid-glass p-6 rounded-2xl text-white hover:bg-white/20 transition-all font-medium text-sm">Over 3 years ago</button>
+                      <button onClick={() => setQuestionStep(3)} className="liquid-glass p-6 rounded-full text-white hover:bg-white/20 transition-all font-medium text-sm">Less than 6 months</button>
+                      <button onClick={() => setQuestionStep(3)} className="liquid-glass p-6 rounded-full text-white hover:bg-white/20 transition-all font-medium text-sm">6-12 months ago</button>
+                      <button onClick={() => setQuestionStep(3)} className="liquid-glass p-6 rounded-full text-white hover:bg-white/20 transition-all font-medium text-sm">1-3 years ago</button>
+                      <button onClick={() => setQuestionStep(3)} className="liquid-glass p-6 rounded-full text-white hover:bg-white/20 transition-all font-medium text-sm">Over 3 years ago</button>
                     </div>
                   </div>
                 )}
@@ -1177,10 +1185,10 @@ export function DentalLayout() {
                   <div className="flex flex-col gap-8 animate-in fade-in zoom-in-95">
                     <h3 className="text-2xl lg:text-3xl text-white font-medium text-center">What is the priority goal?</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <button onClick={() => setQuestionStep(4)} className="liquid-glass p-6 rounded-2xl text-white hover:bg-white/20 hover:scale-[1.02] transition-all font-medium text-sm">Medical / Treatment</button>
-                      <button onClick={() => setQuestionStep(4)} className="liquid-glass p-6 rounded-2xl text-white hover:bg-white/20 hover:scale-[1.02] transition-all font-medium text-sm">Cosmetic Improvement</button>
-                      <button onClick={() => setQuestionStep(4)} className="liquid-glass p-6 rounded-2xl text-white hover:bg-white/20 hover:scale-[1.02] transition-all font-medium text-sm">Braces / Implants</button>
-                      <button onClick={() => setQuestionStep(4)} className="liquid-glass p-6 rounded-2xl text-white hover:bg-white/20 hover:scale-[1.02] transition-all font-medium text-sm">General Cleaning</button>
+                      <button onClick={() => setQuestionStep(4)} className="liquid-glass p-6 rounded-full text-white hover:bg-white/20 hover:scale-[1.02] transition-all font-medium text-sm">Medical / Treatment</button>
+                      <button onClick={() => setQuestionStep(4)} className="liquid-glass p-6 rounded-full text-white hover:bg-white/20 hover:scale-[1.02] transition-all font-medium text-sm">Cosmetic Improvement</button>
+                      <button onClick={() => setQuestionStep(4)} className="liquid-glass p-6 rounded-full text-white hover:bg-white/20 hover:scale-[1.02] transition-all font-medium text-sm">Braces / Implants</button>
+                      <button onClick={() => setQuestionStep(4)} className="liquid-glass p-6 rounded-full text-white hover:bg-white/20 hover:scale-[1.02] transition-all font-medium text-sm">General Cleaning</button>
                     </div>
                   </div>
                 )}
@@ -1192,29 +1200,29 @@ export function DentalLayout() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
                       {/* Left: Inputs */}
                       <div className="flex flex-col gap-4">
-                        <div className="flex items-center liquid-glass rounded-2xl px-5 py-2 focus-within:ring-2 focus-within:ring-white/30 transition-all">
+                        <div className="flex items-center liquid-glass rounded-full px-5 py-2 focus-within:ring-2 focus-within:ring-white/30 transition-all">
                           <User className="w-5 h-5 text-white/50 mr-4 flex-shrink-0" />
                           <input type="text" placeholder="Full Name *" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} className="flex-1 w-full bg-transparent border-none text-white outline-none py-3 placeholder:text-white/40 text-sm" />
                         </div>
-                        <div className="flex items-center liquid-glass rounded-2xl px-5 py-2 focus-within:ring-2 focus-within:ring-white/30 transition-all">
+                        <div className="flex items-center liquid-glass rounded-full px-5 py-2 focus-within:ring-2 focus-within:ring-white/30 transition-all">
                           <Phone className="w-5 h-5 text-white/50 mr-4 flex-shrink-0" />
                           <input type="text" placeholder="Phone *" value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} className="flex-1 w-full bg-transparent border-none text-white outline-none py-3 placeholder:text-white/40 text-sm" />
                         </div>
-                        <div className="flex items-center liquid-glass rounded-2xl px-5 py-2 focus-within:ring-2 focus-within:ring-white/30 transition-all">
+                        <div className="flex items-center liquid-glass rounded-full px-5 py-2 focus-within:ring-2 focus-within:ring-white/30 transition-all">
                           <Calendar className="w-5 h-5 text-white/50 mr-4 flex-shrink-0" />
                           <input type="date" value={formData.date} onChange={(e) => setFormData({...formData, date: e.target.value})} className="flex-1 w-full bg-transparent border-none text-white/90 outline-none py-3 text-sm focus:outline-none" style={{ colorScheme: 'dark' }} />
                         </div>
                       </div>
 
                       {/* Right: Time selectors */}
-                      <div className="flex flex-col gap-2 bg-white/5 rounded-2xl p-4 border border-white/10">
+                      <div className="flex flex-col gap-2 bg-white/5 rounded-[2rem] p-4 border border-white/10">
                         <span className="text-xs font-semibold text-white/50 tracking-widest uppercase mb-2">Available Slots</span>
                         <div className="grid grid-cols-2 gap-2 h-[170px] overflow-y-auto pr-2 custom-scrollbar">
                            {timeslots.map(t => (
                               <button 
                                 key={t} 
                                 onClick={() => setFormData({...formData, time: t})}
-                                className={`py-2 px-1 text-xs rounded-xl transition-all border ${formData.time === t ? 'bg-white text-black font-bold border-white scale-105' : 'bg-transparent text-white border-white/10 hover:bg-white/10'}`}
+                                className={`py-2 px-1 text-xs rounded-full transition-all border ${formData.time === t ? 'bg-white text-black font-bold border-white scale-105' : 'bg-transparent text-white border-white/10 hover:bg-white/10'}`}
                               >
                                 {t}
                               </button>
@@ -1233,12 +1241,12 @@ export function DentalLayout() {
                         setFormData({ name: '', phone: '', date: '', time: '' });
                         setTimeout(() => { setQuestionStep(1); scrollToSection('top'); }, 1000);
                       }}
-                      className="bg-white hover:bg-white/90 text-black w-full py-4 rounded-2xl font-bold text-lg hover:scale-[1.02] active:scale-[0.98] transition-all mb-8"
+                      className="bg-white hover:bg-white/90 text-black w-full py-4 rounded-full font-bold text-lg hover:scale-[1.02] active:scale-[0.98] transition-all mb-8"
                     >
                       Confirm Schedule
                     </button>
 
-                    <div className="p-6 rounded-2xl liquid-glass border border-white/5 flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div className="p-6 rounded-[2rem] liquid-glass border border-white/5 flex flex-col md:flex-row items-center justify-between gap-6">
                       <div className="flex flex-col">
                         <span className="text-white font-medium">Direct Consultation</span>
                         <span className="text-white/40 text-xs">Avoid automated clashes, speak to us directly.</span>
@@ -1246,13 +1254,13 @@ export function DentalLayout() {
                       <div className="flex gap-3">
                         <button 
                           onClick={() => window.open(`tel:${CLINIC_PHONE}`)}
-                          className="flex items-center gap-2 px-5 py-2.5 rounded-xl liquid-glass hover:bg-white/20 hover:scale-105 active:scale-95 text-white text-sm font-medium transition-all"
+                          className="flex items-center gap-2 px-5 py-2.5 rounded-full liquid-glass hover:bg-white/20 hover:scale-105 active:scale-95 text-white text-sm font-medium transition-all"
                         >
                           <Phone className="w-4 h-4" /> Call Now
                         </button>
                         <button 
                           onClick={() => window.open(CLINIC_WHATSAPP)}
-                          className="flex items-center gap-2 px-5 py-2.5 rounded-xl liquid-glass hover:bg-white/20 hover:scale-105 active:scale-95 text-white text-sm font-medium transition-all border border-green-500/20"
+                          className="flex items-center gap-2 px-5 py-2.5 rounded-full liquid-glass hover:bg-white/20 hover:scale-105 active:scale-95 text-white text-sm font-medium transition-all border border-green-500/20"
                         >
                           <svg className="w-4 h-4 text-green-400 fill-current" viewBox="0 0 24 24">
                             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
